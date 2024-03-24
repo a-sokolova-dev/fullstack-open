@@ -1,13 +1,13 @@
 const StatisticsLine = ({ text, value }) => {
   return (
-    <div>
-      {text} {value}
-    </div>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   );
 };
 
 const Statistics = ({ good, neutral, bad }) => {
-    
   const total = () => good + neutral + bad;
 
   const average = () => {
@@ -21,14 +21,16 @@ const Statistics = ({ good, neutral, bad }) => {
   if (total() === 0) return <p>No feedback given</p>;
 
   return (
-    <>
-      <StatisticsLine text={"good"} value={good} />
-      <StatisticsLine text={"neutral"} value={neutral} />
-      <StatisticsLine text={"bad"} value={bad} />
-      <StatisticsLine text={"all"} value={total()} />
-      <StatisticsLine text={"average"} value={average()} />
-      <StatisticsLine text={"positive"} value={positive_percentage()} />
-    </>
+    <table>
+      <tbody>
+        <StatisticsLine text={"good"} value={good} />
+        <StatisticsLine text={"neutral"} value={neutral} />
+        <StatisticsLine text={"bad"} value={bad} />
+        <StatisticsLine text={"all"} value={total()} />
+        <StatisticsLine text={"average"} value={average()} />
+        <StatisticsLine text={"positive"} value={positive_percentage()} />
+      </tbody>
+    </table>
   );
 };
 
