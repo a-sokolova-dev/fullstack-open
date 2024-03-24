@@ -1,31 +1,7 @@
 import { useState } from "react";
+import Statistics from "./Statistics";
 
 const Button = (props) => <button onClick={props.onClick}>{props.text}</button>;
-
-const Statistics = ({ good, neutral, bad }) => {
-  const total = () => good + neutral + bad;
-
-  const average = () => {
-    return (good - bad) / total();
-  };
-
-  const positive_percentage = () => {
-    return (good / total()) * 100;
-  };
-
-  if (total() === 0) return <p>No feedback given</p>;
-
-  return (
-    <>
-      <div>good {good}</div>
-      <div>neutral {neutral}</div>
-      <div>bad {bad}</div>
-      <div>all {total()}</div>
-      <div>average {average()}</div>
-      <div>positive {positive_percentage()}%</div>
-    </>
-  );
-};
 
 const App = () => {
   // save clicks of each button to its own state
