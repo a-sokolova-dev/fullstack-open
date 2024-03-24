@@ -1,7 +1,9 @@
 import Part from "./Part";
 
 const Content = ({ exercises }) => {
-  return exercises.map((e) => <Part title={e.title} amount={e.amount} />);
+  return exercises.map((e) => (
+    <Part key={e.name} title={e.name} amount={e.exercises} />
+  ));
 };
 
 export default Content;
