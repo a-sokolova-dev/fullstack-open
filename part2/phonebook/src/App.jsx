@@ -15,7 +15,7 @@ const App = () => {
   };
 
   const handleNameChange = (event) => {
-    setNewName(event.value);
+    setNewName(event.target.value);
   };
 
   return (
