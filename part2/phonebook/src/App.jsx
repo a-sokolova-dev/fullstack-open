@@ -24,19 +24,21 @@ const App = () => {
         `${newName} is already to the phonebook, replace the old number with a new one?`
       )
     ) {
-      personService.update(changedPerson.id, nameObject).then((response) => {
-        setPersons(
-          persons.map((p) => (p.id !== changedPerson.id ? p : response.data))
-        );
-        setNewName("");
-        setNewNumber("");
-      });
+      personService
+        .update(changedPerson.id, nameObject)
+        .then((returnedPerson) => {
+          setPersons(
+            persons.map((p) => (p.id !== changedPerson.id ? p : returnedPerson))
+          );
+          setNewName("");
+          setNewNumber("");
+        });
 
       return;
     }
 
-    personService.create(nameObject).then((response) => {
-      setPersons(persons.concat(response.data));
+    personService.create(nameObject).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
     });
@@ -75,8 +77,8 @@ const App = () => {
   );
 
   useEffect(() => {
-    personService.getAll().then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   }, []);
 
