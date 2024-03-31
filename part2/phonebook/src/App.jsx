@@ -29,6 +29,22 @@ const App = () => {
     });
   };
 
+  const handleNameDelete = (id) => {
+    const person = persons.find((p) => p.id === id);
+    const updatedPersons = persons.filter((person) => person.id !== id);
+
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+        .deletePerson(id)
+        .then(() => {
+          setPersons(updatedPersons);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -64,7 +80,7 @@ const App = () => {
         onNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} onNameDelete={handleNameDelete} />
     </div>
   );
 };
