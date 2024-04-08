@@ -10,7 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [notification, setNotification] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const addName = (event) => {
     event.preventDefault();
@@ -34,6 +35,16 @@ const App = () => {
           );
           setNewName("");
           setNewNumber("");
+        })
+        .catch(() => {
+          setErrorMessage(
+            `Information of ${changedPerson.name} has already been removed from server`
+          );
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+
+          setPersons(persons.filter((p) => p.id !== changedPerson.id));
         });
 
       return;
@@ -44,9 +55,9 @@ const App = () => {
       setNewName("");
       setNewNumber("");
 
-      setNotification(`Added ${returnedPerson.name}`);
+      setSuccessMessage(`Added ${returnedPerson.name}`);
       setTimeout(() => {
-        setNotification(null);
+        setSuccessMessage(null);
       }, 5000);
     });
   };
@@ -92,7 +103,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification message={successMessage} />
+      <Notification message={errorMessage} type="error" />
       <Filter value={filter} onChange={handleFilterChange} />
       <h2>add a new</h2>
       <PersonForm
