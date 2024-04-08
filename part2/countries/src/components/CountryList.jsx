@@ -1,9 +1,20 @@
+import { useState, useEffect } from "react";
 import Country from "./Country";
 
 const CountryList = ({ countries }) => {
-  if (countries.length === 1) {
-    let country = countries[0];
-    return <Country country={country} />;
+  const [viewedCountry, setViewedCountry] = useState(null);
+
+  useEffect(() => {
+    if (countries.length === 1) setViewedCountry(countries[0]);
+    else setViewedCountry(null);
+  }, [countries]);
+
+  const handleCountryShow = (c) => {
+    setViewedCountry(c);
+  };
+
+  if (viewedCountry) {
+    return <Country country={viewedCountry} />;
   }
 
   if (countries.length > 10) {
@@ -13,7 +24,10 @@ const CountryList = ({ countries }) => {
   return (
     <>
       {countries.map((c) => (
-        <div key={c.cca2}>{c.name.common}</div>
+        <div key={c.cca2}>
+          {c.name.common}{" "}
+          <button onClick={() => handleCountryShow(c)}>show</button>
+        </div>
       ))}
     </>
   );
