@@ -12,3 +12,4 @@ This is a submission repository for the [fullstackopen.com](https://fullstackope
   - [1.1 - 1.5: Course information](/part1/courseinfo)
   - [1.6 - 1.11: Unicafe](/part1/unicafe/)
   - [1.12 - 1.14: Anecdotes](/part1/anecdotes/)
+- [Part 2](/part2)
