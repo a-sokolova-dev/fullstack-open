@@ -14,5 +14,4 @@ This is a submission repository for the [fullstackopen.com](https://fullstackope
   - [1.12 - 1.14: Anecdotes](/part1/anecdotes/)
 - [Part 2](/part2)
 - [Part 3](/part3)
-  - [3.10:](/part3/phonebook) 
-    Deployed backend: https://phonebook-backend-dfa2.onrender.com/api/persons
+    Deployed backend: https://phonebook-deploy-dw00.onrender.com/api/persons
