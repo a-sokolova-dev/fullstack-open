@@ -35,11 +35,17 @@ const App = () => {
           );
           setNewName("");
           setNewNumber("");
+
+          setSuccessMessage(`Updated ${returnedPerson.name}`);
+          setTimeout(() => setSuccessMessage(null), 5000);
         })
-        .catch(() => {
-          setErrorMessage(
-            `Information of ${changedPerson.name} has already been removed from server`
-          );
+        .catch((error) => {
+          if (error.response && error.response.data && error.response.data.error) {
+            setErrorMessage(error.response.data.error);
+          } else {
+            setErrorMessage(`Failed to update ${changedPerson.name}`);
+          }
+
           setTimeout(() => {
             setErrorMessage(null);
           }, 5000);
@@ -56,9 +62,16 @@ const App = () => {
       setNewNumber("");
 
       setSuccessMessage(`Added ${returnedPerson.name}`);
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 5000);
+      setTimeout(() => setSuccessMessage(null), 5000);
+    })
+    .catch((error) => {
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessage(error.response.data.error);
+      } else {
+        setErrorMessage("Failed to add person");
+      }
+
+      setTimeout(() => setErrorMessage(null), 5000);
     });
   };
 
