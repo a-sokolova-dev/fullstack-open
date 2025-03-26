@@ -26,6 +26,15 @@ app.post('/api/blogs', async (request, response, next) => {
   }
 })
 
+app.delete('/api/blogs/:id', async (request, response, next) => {
+  try {
+    await Blog.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } catch (error) {
+    next(error)
+  }
+})
+
 app.use(middleware.unknownEndpoint) 
 app.use(middleware.errorHandler) 
 

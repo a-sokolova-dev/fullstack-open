@@ -112,6 +112,21 @@ test('blog without title is rejected with 400', async () => {
       .post('/api/blogs')
       .send(newBlog)
       .expect(400)
+})
+
+test('a blog can be deleted', async () => {
+    const blogsAtStart = await Blog.find({})
+    const blogToDelete = blogsAtStart[0]
+  
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+  
+    const blogsAtEnd = await Blog.find({})
+    const titles = blogsAtEnd.map(b => b.title)
+  
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
+    assert.ok(!titles.includes(blogToDelete.title))
 })  
   
 test.after(async () => {
