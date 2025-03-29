@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { useState } from 'react'
 
 const Blog = ({ blog, handleLike, handleDelete, user }) => {
@@ -11,11 +12,11 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
     marginBottom: 5
   }
 
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
+  const toggleVisibility = () => setVisible(!visible)
 
-  const isOwner = user && blog.user && blog.user.username === user.username
+  const isOwner = user && blog.user && (
+    blog.user.id === user.id || blog.user === user.id
+  )
 
   return (
     <div style={blogStyle}>
@@ -42,6 +43,29 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
       )}
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    user: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        id: PropTypes.string,
+        username: PropTypes.string,
+      })
+    ]),
+    likes: PropTypes.number.isRequired,
+    author: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+  }).isRequired
 }
 
 export default Blog
