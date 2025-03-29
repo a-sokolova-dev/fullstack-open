@@ -13,19 +13,9 @@ blogRouter.get('/', async (request, response) => {
 
 blogRouter.post('/', async (request, response, next) => {
   try {
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    const user = request.user
 
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid or missing' })
-    }
-
-    const user = await User.findById(decodedToken.id)
-
-    const blog = new Blog({
-      ...request.body,
-      user: user._id
-    })
-
+    const blog = new Blog({ ...request.body, user: user._id })
     const savedBlog = await blog.save()
 
     user.blogs = user.blogs.concat(savedBlog._id)
@@ -39,21 +29,14 @@ blogRouter.post('/', async (request, response, next) => {
 
 blogRouter.delete('/:id', async (request, response, next) => {
   try {
-    if (!request.token) {
-      return response.status(401).json({ error: 'token missing or invalid' })
-    }
-
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid' })
-    }
+    const user = request.user
 
     const blog = await Blog.findById(request.params.id)
     if (!blog) {
       return response.status(404).json({ error: 'blog not found' })
     }
 
-    if (blog.user.toString() !== decodedToken.id.toString()) {
+    if (blog.user.toString() !== user.id.toString()) {
       return response.status(401).json({ error: 'unauthorized: only creator can delete' })
     }
 
