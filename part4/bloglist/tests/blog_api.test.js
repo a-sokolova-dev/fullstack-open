@@ -75,7 +75,6 @@ test('blog without "likes" defaults to 0', async () => {
       title: "No Likes Blog",
       author: "Anna Sokolova",
       url: "http://example.com/nolikes"
-      // no "likes" field
     }
   
     const response = await api
