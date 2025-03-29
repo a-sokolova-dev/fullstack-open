@@ -32,7 +32,6 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
-      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
@@ -55,10 +54,7 @@ const App = () => {
       url: newUrl
     }
     try {
-      const config = {
-        headers: { Authorization: `Bearer ${user.token}` }
-      }
-      const returnedBlog = await blogService.create(newBlog, config)
+      const returnedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(returnedBlog))
       setNewTitle('')
       setNewAuthor('')
