@@ -19,8 +19,8 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
   )
 
   return (
-    <div style={blogStyle}>
-      <div>
+    <div style={blogStyle} className="blog">
+      <div className="blog-summary">
         {blog.title} {blog.author}
         <button onClick={toggleVisibility}>
           {visible ? 'hide' : 'view'}
@@ -28,16 +28,14 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
       </div>
 
       {visible && (
-        <div>
+        <div className="blog-details">
           <div>{blog.url}</div>
           <div>
             likes {blog.likes} <button onClick={() => handleLike(blog)}>like</button>
           </div>
           <div>{blog.user?.username}</div>
           {isOwner && (
-            <button onClick={() => handleDelete(blog)} style={{ backgroundColor: 'lightblue' }}>
-              remove
-            </button>
+            <button onClick={() => handleDelete(blog)}>remove</button>
           )}
         </div>
       )}
