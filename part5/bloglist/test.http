@@ -1,1 +1,8 @@
-GET http://localhost:3003/api/blogs
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "annas2",
+  "name": "Anna Sokolova 2",
+  "password": ""
+}
