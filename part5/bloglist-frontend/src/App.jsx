@@ -9,6 +9,9 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -44,6 +47,27 @@ const App = () => {
     setUser(null)
   }
 
+  const addBlog = async (event) => {
+    event.preventDefault()
+    const newBlog = {
+      title: newTitle,
+      author: newAuthor,
+      url: newUrl
+    }
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${user.token}` }
+      }
+      const returnedBlog = await blogService.create(newBlog, config)
+      setBlogs(blogs.concat(returnedBlog))
+      setNewTitle('')
+      setNewAuthor('')
+      setNewUrl('')
+    } catch (error) {
+      console.error('Error adding blog:', error)
+    }
+  }
+
   if (user === null) {
     return (
       <div>
@@ -76,6 +100,33 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <p>{user.username} logged in <button onClick={handleLogout}>logout</button></p>
+
+      <h3>create new</h3>
+      <form onSubmit={addBlog}>
+        <div>
+          title:
+          <input
+            value={newTitle}
+            onChange={({ target }) => setNewTitle(target.value)}
+          />
+        </div>
+        <div>
+          author:
+          <input
+            value={newAuthor}
+            onChange={({ target }) => setNewAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url:
+          <input
+            value={newUrl}
+            onChange={({ target }) => setNewUrl(target.value)}
+          />
+        </div>
+        <button type="submit">create</button>
+      </form>
+
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
       ))}
