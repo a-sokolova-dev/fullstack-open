@@ -1,7 +1,10 @@
-POST http://localhost:3003/api/login
+POST http://localhost:3003/api/blogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFubmFzIiwiaWQiOiI2N2U3ZTA5MDdmNDFlNGQ0NzNiODNjODUiLCJpYXQiOjE3NDMyNTAwNDJ9.OA2uK4dOTZ1O2bZbGcHfaG_a1heK4dM8DJ1Xvif5f-Q
 Content-Type: application/json
 
 {
-  "username": "annas",
-  "password": "secret123"
+  "title": "Authenticated Blog Post",
+  "author": "Anna Sokolova",
+  "url": "http://example.com/authenticated",
+  "likes": 42
 }

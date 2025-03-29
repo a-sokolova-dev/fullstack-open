@@ -13,6 +13,7 @@ const blogRouter = require('./controllers/blogs')
 app.use(cors())
 app.use(express.json())
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 
 app.use('/api/login', loginRouter)
 app.use('/api/users', userRouter)
