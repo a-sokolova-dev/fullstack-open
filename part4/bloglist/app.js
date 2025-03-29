@@ -35,6 +35,28 @@ app.delete('/api/blogs/:id', async (request, response, next) => {
   }
 })
 
+app.put('/api/blogs/:id', async (request, response, next) => {
+  const { title, author, url, likes } = request.body
+
+  const updatedData = { title, author, url, likes }
+
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      request.params.id,
+      updatedData,
+      { new: true, runValidators: true, context: 'query' }
+    )
+
+    if (updatedBlog) {
+      response.json(updatedBlog)
+    } else {
+      response.status(404).end()
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
 app.use(middleware.unknownEndpoint) 
 app.use(middleware.errorHandler) 
 
