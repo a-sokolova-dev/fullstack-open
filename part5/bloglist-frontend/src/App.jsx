@@ -30,6 +30,11 @@ const App = () => {
     }
   }, [user])
 
+  const notify = (message, type = 'success') => {
+    setNotification({ message, type })
+    setTimeout(() => setNotification({ message: null, type: null }), 5000)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -38,11 +43,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      setNotification({ message: `Welcome ${user.username}`, type: 'success' })
-      setTimeout(() => setNotification({ message: null, type: null }), 5000)
-    } catch (exception) {
-      setNotification({ message: 'wrong username or password', type: 'error' })
-      setTimeout(() => setNotification({ message: null, type: null }), 5000)
+      notify(`Welcome ${user.username}`)
+    } catch (error) {
+      notify('Wrong username or password', 'error')
     }
   }
 
@@ -56,10 +59,9 @@ const App = () => {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
       blogFormRef.current.toggleVisibility()
-      setNotification({ message: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, type: 'success' })
-      setTimeout(() => setNotification({ message: null, type: null }), 5000)
+      notify(`A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`)
     } catch (error) {
-      console.error('Error adding blog:', error)
+      notify('Failed to add blog: ' + error.response?.data?.error || error.message, 'error')
     }
   }
 
@@ -71,16 +73,16 @@ const App = () => {
       title: blogToLike.title,
       url: blogToLike.url
     }
-  
+
     try {
       const returnedBlog = await blogService.update(blogToLike.id, updatedBlog)
       setBlogs(blogs.map(blog =>
         blog.id === blogToLike.id ? returnedBlog : blog
-      ))      
+      ))
     } catch (error) {
-      console.error('Error liking blog:', error)
+      notify('Failed to like blog: ' + error.response?.data?.error || error.message, 'error')
     }
-  }  
+  }
 
   if (user === null) {
     return (
