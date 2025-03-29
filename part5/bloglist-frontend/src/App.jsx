@@ -87,7 +87,7 @@ const App = () => {
   const handleDelete = async (blogToDelete) => {
     const confirmMessage = `Remove blog "${blogToDelete.title}" by ${blogToDelete.author}?`
     if (!window.confirm(confirmMessage)) return
-  
+
     try {
       await blogService.remove(blogToDelete.id)
       setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id))
@@ -95,7 +95,7 @@ const App = () => {
     } catch (error) {
       notify('Failed to delete blog: ' + (error.response?.data?.error || error.message), 'error')
     }
-  }  
+  }
 
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
