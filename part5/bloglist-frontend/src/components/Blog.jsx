@@ -30,7 +30,7 @@ const Blog = ({ blog, handleLike }) => {
           <div>
             likes {blog.likes} <button onClick={() => handleLike(blog)}>like</button>
           </div>
-          <div>{blog.user?.name}</div>
+          <div>{blog.user?.username}</div>
         </div>
       )}
     </div>

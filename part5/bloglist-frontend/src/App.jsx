@@ -75,8 +75,8 @@ const App = () => {
     try {
       const returnedBlog = await blogService.update(blogToLike.id, updatedBlog)
       setBlogs(blogs.map(blog =>
-        blog.id === blogToLike.id ? { ...returnedBlog, user: blogToLike.user } : blog
-      ))
+        blog.id === blogToLike.id ? returnedBlog : blog
+      ))      
     } catch (error) {
       console.error('Error liking blog:', error)
     }
