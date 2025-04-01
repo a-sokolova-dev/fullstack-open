@@ -13,6 +13,7 @@ const createBlog = async (page, { title, author, url }) => {
     await inputs[2].fill(url)
   
     await page.getByRole('button', { name: 'create' }).click()
+    await page.locator('[data-testid="blog"]').filter({ hasText: title }).waitFor()
 }
   
 module.exports = {

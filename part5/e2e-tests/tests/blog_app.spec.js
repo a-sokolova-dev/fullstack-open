@@ -1,10 +1,9 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith } = require('./helpers')
+const { loginWith, createBlog } = require('./helpers')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
     await request.post('/api/testing/reset')
-
     await request.post('/api/users', {
       data: {
         name: 'Matti Luukkainen',
@@ -38,6 +37,25 @@ describe('Blog app', () => {
       await expect(error).toHaveCSS('border-style', 'solid')
 
       await expect(page.getByText('Matti Luukkainen logged in')).not.toBeVisible()
+    })
+  })
+
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+      await loginWith(page, 'mluukkai', 'salainen')
+    })
+
+    test('a new blog can be created', async ({ page }) => {
+      const blogData = {
+        title: 'Playwright in Fullstack Open',
+        author: 'Test Bot',
+        url: 'https://fullstackopen.com/playwright'
+      }
+
+      await createBlog(page, blogData) 
+      await expect(
+        page.locator('[data-testid="blog"]').filter({ hasText: blogData.title })
+      ).toBeVisible()
     })
   })
 })
