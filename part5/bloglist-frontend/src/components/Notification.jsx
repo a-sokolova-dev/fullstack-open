@@ -12,8 +12,10 @@ const Notification = ({ message, type }) => {
     marginBottom: 10
   }
 
+  const className = type === 'error' ? 'error' : 'success'
+
   return (
-    <div style={style}>
+    <div className={className} style={style}>
       {message}
     </div>
   )
