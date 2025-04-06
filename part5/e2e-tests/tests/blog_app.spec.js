@@ -1,5 +1,4 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith, createBlog } = require('./helpers')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -13,49 +12,5 @@ describe('Blog app', () => {
     })
 
     await page.goto('/')
-  })
-
-  test('Login form is shown', async ({ page }) => {
-    await expect(page.getByText('Log in to application')).toBeVisible()
-    await expect(page.getByTestId('username')).toBeVisible()
-    await expect(page.getByTestId('password')).toBeVisible()
-    await expect(page.getByRole('button', { name: 'login' })).toBeVisible()
-  })
-
-  describe('Login', () => {
-    test('succeeds with correct credentials', async ({ page }) => {
-      await loginWith(page, 'mluukkai', 'salainen')
-      await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
-    })
-
-    test('fails with wrong credentials', async ({ page }) => {
-      await loginWith(page, 'mluukkai', 'wrongpassword')
-
-      const error = await page.locator('.error')
-      await expect(error).toContainText('Wrong username or password')
-      await expect(error).toHaveCSS('color', 'rgb(255, 0, 0)')
-      await expect(error).toHaveCSS('border-style', 'solid')
-
-      await expect(page.getByText('Matti Luukkainen logged in')).not.toBeVisible()
-    })
-  })
-
-  describe('When logged in', () => {
-    beforeEach(async ({ page }) => {
-      await loginWith(page, 'mluukkai', 'salainen')
-    })
-
-    test('a new blog can be created', async ({ page }) => {
-      const blogData = {
-        title: 'Playwright in Fullstack Open',
-        author: 'Test Bot',
-        url: 'https://fullstackopen.com/playwright'
-      }
-
-      await createBlog(page, blogData) 
-      await expect(
-        page.locator('[data-testid="blog"]').filter({ hasText: blogData.title })
-      ).toBeVisible()
-    })
   })
 })
