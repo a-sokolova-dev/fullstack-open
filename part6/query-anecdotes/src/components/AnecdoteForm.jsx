@@ -12,7 +12,8 @@ const addAnecdote = async (newAnecdote) => {
   });
 
   if (!response.ok) {
-    throw new Error('Failed to add anecdote');
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to add anecdote');
   }
 
   return response.json();
@@ -29,13 +30,13 @@ const AnecdoteForm = () => {
         ...oldData,
         newAnecdote,
       ]);
-      dispatch({ type: 'SET_NOTIFICATION', message: `Anecdote added: "${newAnecdote.content}"` });
+      dispatch({ type: 'SET_NOTIFICATION', message: `anecdote added: "${newAnecdote.content}"` });
       setTimeout(() => {
         dispatch({ type: 'CLEAR_NOTIFICATION' });
       }, 5000);
     },
     onError: (error) => {
-      dispatch({ type: 'SET_NOTIFICATION', message: `Error: ${error.message}` });
+      dispatch({ type: 'SET_NOTIFICATION', message: `error: ${error.message}` });
       setTimeout(() => {
         dispatch({ type: 'CLEAR_NOTIFICATION' });
       }, 5000);
@@ -45,13 +46,6 @@ const AnecdoteForm = () => {
   const onCreate = (event) => {
     event.preventDefault();
     const content = event.target.anecdote.value;
-    if (content.length < 5) {
-      dispatch({ type: 'SET_NOTIFICATION', message: 'too short anecdote, must have length 5 or more' });
-      setTimeout(() => {
-        dispatch({ type: 'CLEAR_NOTIFICATION' });
-      }, 5000);
-      return;
-    }
     event.target.anecdote.value = '';
     newAnecdoteMutation.mutate({ content, votes: 0 });
   };
