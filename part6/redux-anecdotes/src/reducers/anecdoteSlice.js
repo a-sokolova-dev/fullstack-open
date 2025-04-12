@@ -9,8 +9,8 @@ const anecdoteSlice = createSlice({
       state.push(action.payload)
     },
     updateVote(state, action) {
-      const updatedAnecdote = action.payload
-      return state.map(a => a.id === updatedAnecdote.id ? updatedAnecdote : a)
+      const updated = action.payload
+      return state.map(a => a.id === updated.id ? updated : a)
     },
     setAnecdotes(state, action) {
       return action.payload
@@ -22,22 +22,34 @@ export const { appendAnecdote, updateVote, setAnecdotes } = anecdoteSlice.action
 
 export const initializeAnecdotes = () => {
   return async dispatch => {
-    const anecdotes = await getAll()
-    dispatch(setAnecdotes(anecdotes))
+    try {
+      const anecdotes = await getAll()
+      dispatch(setAnecdotes(anecdotes))
+    } catch (error) {
+      console.error('Failed to load anecdotes:', error)
+    }
   }
 }
 
 export const createAnecdote = (content) => {
   return async dispatch => {
-    const newAnecdote = await createNewAnecdote(content)
-    dispatch(appendAnecdote(newAnecdote))
+    try {
+      const newAnecdote = await createNewAnecdote(content)
+      dispatch(appendAnecdote(newAnecdote))
+    } catch (error) {
+      console.error('Failed to create anecdote:', error)
+    }
   }
 }
 
 export const voteAnecdote = (anecdote) => {
   return async dispatch => {
-    const updatedAnecdote = await updateAnecdote({ ...anecdote, votes: anecdote.votes + 1 })
-    dispatch(updateVote(updatedAnecdote))
+    try {
+      const updated = await updateAnecdote({ ...anecdote, votes: anecdote.votes + 1 })
+      dispatch(updateVote(updated))
+    } catch (error) {
+      console.error('Failed to update vote:', error)
+    }
   }
 }
 

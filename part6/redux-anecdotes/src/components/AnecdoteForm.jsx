@@ -7,16 +7,13 @@ const AnecdoteForm = () => {
   const [content, setContent] = useState('')
   const dispatch = useDispatch()
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault()
-    if (content.trim() === '') return
 
-    try {
+    if (content.trim()) {
       dispatch(createAnecdote(content))
       dispatch(setNotification(`you created '${content}'`, 5))
       setContent('')
-    } catch (error) {
-      console.error('Failed to create anecdote:', error)
     }
   }
 
