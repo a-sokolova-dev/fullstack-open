@@ -52,6 +52,18 @@ describe('Blog app', () => {
 
         const likes = page.getByText(/likes 1/);
         await expect(likes).toBeVisible();
-  });
+    });
+
+    test('Remove a blog', async ({ page }) => {
+      await createBlog(page, 'Blog To Delete', 'Anna', 'url.com');
+      const blog = page.locator('div.blog').filter({ hasText: 'Blog To Delete' });
+    
+      await blog.getByRole('button', { name: 'view' }).click();
+
+      page.once('dialog', dialog => dialog.accept());
+    
+      await blog.getByRole('button', { name: 'remove' }).click();
+      await expect(blog).not.toBeVisible();
+    });     
   })
 })
