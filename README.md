@@ -17,3 +17,4 @@ This is a submission repository for the [fullstackopen.com](https://fullstackope
     Deployed backend: https://phonebook-deploy-dw00.onrender.com/api/persons
 - [Part 4](/part4)
 - [Part 5](/part5)
+- [Part 6](/part6)
