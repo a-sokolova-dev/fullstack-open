@@ -54,7 +54,7 @@ describe('Blog app', () => {
         await expect(likes).toBeVisible();
     });
 
-    test('Remove a blog', async ({ page }) => {
+    test('a blog can be removed', async ({ page }) => {
       await createBlog(page, 'Blog To Delete', 'Anna', 'url.com');
       const blog = page.locator('div.blog').filter({ hasText: 'Blog To Delete' });
     
@@ -64,6 +64,24 @@ describe('Blog app', () => {
     
       await blog.getByRole('button', { name: 'remove' }).click();
       await expect(blog).not.toBeVisible();
-    });     
+    });
+
+    test('only the user who added the blog sees the blog\'s delete button', async ({ page, request }) => {
+      await createBlog(page, 'Hidden Delete Button Blog', 'Anna', 'url.com');
+      await page.getByRole('button', { name: 'logout' }).click();
+    
+      await request.post('/api/users', {
+        data: {
+          name: 'Another User',
+          username: 'another',
+          password: 'secret'
+        }
+      });
+    
+      await loginWith(page, 'another', 'secret');
+      const blog = page.locator('div.blog').filter({ hasText: 'Hidden Delete Button Blog' });
+      await blog.getByRole('button', { name: 'view' }).click();
+      await expect(blog.getByRole('button', { name: 'remove' })).not.toBeVisible();
+    });    
   })
 })
