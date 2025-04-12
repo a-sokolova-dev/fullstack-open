@@ -10,17 +10,19 @@ const getAnecdotes = async () => {
   return response.json();
 };
 
-const addAnecdote = async (newAnecdote) => {
-  const response = await fetch('http://localhost:3001/anecdotes', {
-    method: 'POST',
+const voteAnecdote = async (anecdote) => {
+  const updatedAnecdote = { ...anecdote, votes: anecdote.votes + 1 };
+  
+  const response = await fetch(`http://localhost:3001/anecdotes/${anecdote.id}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(newAnecdote),
+    body: JSON.stringify(updatedAnecdote),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to add anecdote');
+    throw new Error('Failed to vote for anecdote');
   }
 
   return response.json();
@@ -35,8 +37,21 @@ const App = () => {
     }
   );
 
+  const queryClient = useQueryClient();
+
+  const voteAnecdoteMutation = useMutation({
+    mutationFn: voteAnecdote,
+    onSuccess: (updatedAnecdote) => {
+      queryClient.setQueryData(['anecdotes'], (oldData) =>
+        oldData.map((anecdote) =>
+          anecdote.id === updatedAnecdote.id ? updatedAnecdote : anecdote
+        )
+      );
+    },
+  });
+
   const handleVote = (anecdote) => {
-    console.log('vote for', anecdote);
+    voteAnecdoteMutation.mutate(anecdote);
   };
 
   if (isLoading) {
@@ -57,7 +72,7 @@ const App = () => {
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>
-            has {anecdote.votes}
+            has {anecdote.votes} votes
             <button onClick={() => handleVote(anecdote)}>vote</button>
           </div>
         </div>
