@@ -83,5 +83,38 @@ describe('Blog app', () => {
       await blog.getByRole('button', { name: 'view' }).click();
       await expect(blog.getByRole('button', { name: 'remove' })).not.toBeVisible();
     });    
+
+    test('blogs are arranged in the order according to the likes', async ({ page }) => {
+      await createBlog(page, 'Blog 1', 'Author 1', 'url1.com');
+      await createBlog(page, 'Blog 2', 'Author 2', 'url2.com');
+      await createBlog(page, 'Blog 3', 'Author 3', 'url3.com');
+    
+      const blog1 = page.locator(`div.blog:has-text("Blog 1")`);
+      await blog1.getByRole('button', { name: 'view' }).click();
+      await blog1.getByRole('button', { name: 'like' }).click();
+      await blog1.getByText('1 like').waitFor();
+    
+      const blog2 = page.locator(`div.blog:has-text("Blog 2")`);
+      await blog2.getByRole('button', { name: 'view' }).click();
+      await blog2.getByRole('button', { name: 'like' }).click();
+      await blog2.getByText('1 like').waitFor();
+      await blog2.getByRole('button', { name: 'like' }).click();
+      await blog2.getByText('2 like').waitFor();
+    
+      const blog3 = page.locator(`div.blog:has-text("Blog 3")`);
+      await blog3.getByRole('button', { name: 'view' }).click();
+      await blog3.getByRole('button', { name: 'like' }).click();
+      await blog3.getByText('1 like').waitFor();
+      await blog3.getByRole('button', { name: 'like' }).click();
+      await blog3.getByText('2 like').waitFor();
+      await blog3.getByRole('button', { name: 'like' }).click();
+      await blog3.getByText('3 like').waitFor();
+    
+      const blogs = page.locator('div.blog');
+      await expect(blogs.nth(0)).toContainText('Blog 3');
+      await expect(blogs.nth(1)).toContainText('Blog 2');
+      await expect(blogs.nth(2)).toContainText('Blog 1');
+    });
+    
   })
 })
